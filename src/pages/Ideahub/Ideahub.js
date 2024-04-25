@@ -30,6 +30,70 @@ const Ideahub = () => {
     },
   });
   console.log("formValues:", formik.values);
+
+  // to fetch the user details to display
+  const fetchUserDetails = async() => {
+    try{
+      const token = localStorage.getItem('access_token');
+      const response = await fetch('https://ideahubbackend.up.railway.app/',{
+        method : 'GET',
+        headers :{
+            'authorization' : token,
+            'Content-Type': 'application/json',
+        }
+      });
+      if(response.status === 403){
+        // navigate to login page
+      }
+      const result = await response.json();
+      if(!result.error && response.status === 200){
+        const data = result.data
+        // set the default variables in the feilds like email, phone number,name
+      }
+      
+      console.log(result.message);
+    }catch(err){
+      console.log('Error proccessing the request:',err.message)
+    }
+  }
+
+  // handle idea submission
+  const handleIdeaSubmit = async(e) => {
+    e.preventDefault();
+    try{
+      // Assuming userRole,idea,pros,crons are provided in data as object
+      const token = localStorage.getItem('access_token');
+      const data = {
+
+      }
+      const response = await fetch('https://ideahubbackend.up.railway.app/',{
+        method : 'POST',
+        headers :{
+            'authorization' : token,
+            'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(data)
+      })
+      if(response.status === 403){
+        // navigate to login page
+      }
+      const result = await response.json()
+      if(!result.error && response.status === 200){
+        // tell the user that data was stored successfully.
+      }else{
+        // tell user to try again. (update it)
+      }
+      console.log(result.message);
+    }catch(err){
+      console.log('Error proccessing the request:',err.message)
+    }
+  }
+
+
+  useEffect(async()=>{
+    await fetchUserDetails();
+  },[])
+
   return (
     <>
       <div className={style.main}>

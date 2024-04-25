@@ -20,6 +20,35 @@ const Signin = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  // handle sign in 
+  const handleSignIn = async(e) => {
+    e.preventDefault();
+    try{
+      // Assuming email, password are provided in data as object
+      const data = {
+
+      }
+      const response = await fetch('https://ideahubbackend.up.railway.app/auth/login',{
+        method : 'POST',
+        headers :{
+            'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(data)
+      })
+      const result = await response.json()
+      if(!result.error && response.status === 200){
+        localStorage.setItem('access_token',result.accessToken);
+        // navigate to home page (account created successfully) (update it)
+      }else{
+        // stay in the signin page (update it)
+      }
+      console.log(result.message);
+    }catch(err){
+      console.log('Error proccessing the request:',err.message)
+    }
+  }
+
   useEffect(() => {
     document.title = "Sign In";
   }, []);
@@ -119,7 +148,7 @@ const Signin = () => {
               />
             </FormControl>
             <div className={style.forgtPassTxt}>Forgot Password?</div>
-            <button className={style.SignInbtn}>Sign In</button>
+            <button className={style.SignInbtn} onClick={handleSignIn}>Sign In</button>
           </div>
           <div className={style.ParOfDirectToSignUp}>
             <span>Don't have an account?</span>

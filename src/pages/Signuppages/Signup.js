@@ -14,6 +14,9 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ideahub from "../../assets/IdeaHubideahub_logo.jpg";
+import { Password } from "@mui/icons-material";
+
+
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -34,19 +37,41 @@ const Signup = () => {
     return otp.toString();
   };
 
+  // to make request for OTP
+  const sendOtpRequest = async(email) => {
+    try{
+      const data = {
+        email : email
+      }
+      const response = await fetch('https://ideahubbackend.up.railway.app/auth/otp',{
+        method : 'POST',
+        headers :{
+            'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(data)
+      })
+      const result = await response.json()
+      if( !result.error || response.status === 200){
+        console.log(result.message);
+        // Show the white card
+        setShowWhiteCard(true);
+      }
+    }catch(err){
+      console.log('Error proccessing the request:',err.message)
+    }
+  }
+
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+
     // Assuming email address is retrieved from the form
     const enteredEmail = e.target.elements.emailSignup.value;
     setEmail(enteredEmail);
     const generatedOTP = generateOTP();
     setOtp(generatedOTP);
-    // Call API to send OTP to the user's email
-    // Placeholder code for sending OTP via email
-    console.log(`Sending OTP ${generatedOTP} to ${enteredEmail}`);
-    // Show the white card
-    setShowWhiteCard(true);
+    // to make request for the OTP
+    await sendOtpRequest(email);
   };
 
   const handleOtpChange = (index, value) => {
@@ -60,13 +85,37 @@ const Signup = () => {
     setAccountCreated(false);
   };
 
-  const handleWhiteCardSubmit = (e) => {
+  const handleWhiteCardSubmit = async(e) => {
     e.preventDefault();
-    // Placeholder for handling OTP submission
+    try{
+      // Placeholder for handling OTP submission
     // Here you can verify the OTP and proceed accordingly
     // For demonstration, I'm setting the accountCreated state to true
-    setAccountCreated(true);
+
+    // Assuming name, phone(as number), email, password, otp(as number) are provided in data
+    const data = {
+
+    }
+    const response = await fetch('https://ideahubbackend.up.railway.app/auth/register',{
+        method : 'POST',
+        headers :{
+            'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(data)
+      })
+      const result = await response.json()
+      if(!result.error && response.status === 201){
+        localStorage.setItem('access_token',result.accessToken);
+        // navigate to home page (account created successfully) (update it)
+      }else{
+        // stay in the signup page (update it)
+      }
+      console.log(result.message);
+    }catch(err){
+      console.log('Error proccessing the request:',err.message)
+    }
   };
+
 
   useEffect(() => {
     let timerId;
@@ -86,12 +135,17 @@ const Signup = () => {
     return () => clearTimeout(timerId);
   }, [showWhiteCard, resendTimer]);
 
-  const handleResendOTP = () => {
+  const handleResendOTP = async() => {
     // Handle resend OTP action here
     // For demonstration, you can reset the timer
     const generatedOTP = generateOTP();
     setOtp(generatedOTP);
-    setResendTimer(30);
+    
+    // resend option should work only when timer becomes 0.
+    if(resendTimer === 0){
+      setResendTimer(30);
+      await sendOtpRequest(email);
+    }
   };
 
   const [mobile, setMobile] = useState("");
@@ -141,9 +195,10 @@ const Signup = () => {
                   <span>Full Name</span>
                 </label>
                 <OutlinedInput
+                  name = 'nameSignup'
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="outlined-adornment-weight"
+                  id="nameSignup"
                   placeholder="Enter Your Full Name"
                   endAdornment={
                     <InputAdornment position="end">
@@ -200,7 +255,8 @@ const Signup = () => {
                 <OutlinedInput
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="outlined-adornment-weight"
+                  name="mobileSignup"
+                  id="mobileSignup"
                   placeholder="+91-12345-67890"
                   value={mobile}
                   onChange={handleMobileChange}
@@ -224,15 +280,16 @@ const Signup = () => {
                 }}
                 variant="standard"
               >
-                <label htmlFor="outlined-adornment-password">
+                <label htmlFor="signUpPassword">
                   <span className={style.starMark}>*</span>
                   <span>Password</span>
                 </label>
                 <OutlinedInput
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="outlined-adornment-password"
-                  type={showPassword ? "text" : "password"}
+                  id="signUpPassword"
+                  name = "signUpPassword"
+                  type={showPassword ? "text" : "password" }
                   placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">
@@ -259,14 +316,15 @@ const Signup = () => {
                 }}
                 variant="standard"
               >
-                <label htmlFor="outlined-adornment-password">
+                <label htmlFor="signUpPasswordConfirm">
                   <span className={style.starMark}>*</span>
                   <span>Confirm Password</span>
                 </label>
                 <OutlinedInput
+                  name="signUpPasswordConfirm"
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="outlined-adornment-password"
+                  id="signUpPasswordCofirm"
                   type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   endAdornment={
