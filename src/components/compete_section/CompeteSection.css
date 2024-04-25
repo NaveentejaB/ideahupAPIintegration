@@ -1,0 +1,110 @@
+.compete_section {
+  width: 100%;
+}
+.compete_section_container {
+  display: flex;
+  justify-content: space-between;
+}
+.compete_section_image {
+  width: 50%;
+}
+.compete_img {
+  width: 100%;
+}
+.compete_section_text {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.countdown_time {
+  align-items: flex-start;
+}
+.countdown_time_heading {
+  font-size: 22px;
+  color: var(--sub-text);
+}
+.countdown_time_left {
+  display: flex;
+  padding: 30px 0px;
+}
+.days_text {
+  margin-right: 10px;
+}
+.timer_dates {
+  font-size: 28px;
+  color: var(--count-down-color);
+  margin-right: 3px;
+}
+.timer_text {
+  font-size: 16px;
+  color: var(--sub-text);
+}
+.compete_text {
+  padding: 60px 0px;
+}
+.days_timer_left {
+  color: #ff5c33;
+  font-size: 36px;
+  text-align: center;
+}
+@media screen and (max-width: 1024px) {
+  .countdown_time_left {
+    padding: 10px 0px;
+  }
+  .compete_text {
+    padding: 20px 0px;
+  }
+  .days_timer_left {
+    color: #ff5c33;
+    font-size: 26px;
+    text-align: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .compete_section_image {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .compete_img {
+    width: 120%;
+  }
+  .compete_sub {
+    font-size: 1rem;
+  }
+  .countdown_time_heading {
+    font-size: 20px;
+    color: var(--sub-text);
+  }
+  .timer_dates {
+    font-size: 24px;
+  }
+  .timer_text {
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 425px) {
+  .compete_section_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .compete_img {
+    display: none;
+  }
+  .compete_section_text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 0px;
+    text-align: center;
+  }
+  .countdown_time_left {
+    align-items: center;
+    justify-content: center;
+  }
+}
