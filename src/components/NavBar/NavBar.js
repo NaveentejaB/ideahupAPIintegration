@@ -57,10 +57,10 @@ const NavBar = () => {
         </div>
       ) : (
         <div className="nav_btn">
-          <a className="nrml_btn" href="/login">
+          <a className="nrml_btn" href="/signin">
             Login
           </a>
-          <a className="primary_btn" href="/register">
+          <a className="primary_btn" href="/signup">
             Register
           </a>
         </div>

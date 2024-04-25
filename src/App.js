@@ -1,11 +1,8 @@
-import NavBar from "./components/NavBar/NavBar";
-import HomePage from "./pages/HomePage/HomePage";
-
+import Navigator from "./components/navigator/Navigator";
 function App() {
   return (
     <>
-      <NavBar />
-      <HomePage />
+      <Navigator />
     </>
   );
 }

@@ -1,0 +1,17 @@
+.borderless-input{
+    padding: 0 5px;
+    font-family: "Josefin Sans", sans-serif !important;
+    height: 50px;
+    border-radius: 10px;
+}
+.borderless-input .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  
+.borderless-input:hover .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+}
+
+.borderless-input.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+}

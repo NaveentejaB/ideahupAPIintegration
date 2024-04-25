@@ -1,0 +1,225 @@
+@import url("https://fonts.googleapis.com/css2?family=Anta&family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Cantarell:wght@700&family=Caveat&family=Genos:wght@500&family=Inter:wght@700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Manrope:wght@200..800&family=Montserrat:wght@500&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:wght@500&family=Poiret+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Syne:wght@700&family=Ubuntu:wght@700&display=swap");
+
+/* Example styles using the imported Google Fonts */
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.heading {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.paragraph {
+  font-family: "Inter", sans-serif;
+}
+
+.signinMain {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: none;
+}
+.signInLeftDiv {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signInRightDiv {
+  width: 40%;
+  height: 100%;
+  background-color: #050b30;
+}
+.signInRightDiv > img {
+  width: 100%;
+  height: 100vh;
+  object-fit: fill;
+}
+.signInBox {
+  width: 600px;
+  height: 600px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.IdeaHubDiv {
+  width: 230px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.LogoAndTxtBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.logoDiv {
+  width: 40px;
+  height: 40px;
+}
+.logoDiv > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.IdeaHubDiv > .txt {
+  font-size: 35px;
+}
+.txt > .thick {
+  font-size: 38px;
+  font-weight: 800;
+}
+.SignInTxtDiv {
+  width: 250px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.signInExtraTxt {
+  color: #0407446e;
+}
+.signInTxt {
+  font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.starMark {
+  color: red;
+}
+.signInInput {
+  color: #0407446e;
+}
+.signInInput > label {
+  margin: 5px 2px;
+}
+.borderless-input {
+  padding: 0 5px;
+  font-family: "Josefin Sans", sans-serif !important;
+  height: 50px;
+  border-radius: 10px;
+}
+.borderless-input .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.borderless-input:hover .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.borderless-input.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+.forgtPassTxt {
+  width: 50ch;
+  text-align: end;
+  padding: 0 5px;
+  color: #0407446e;
+}
+.SignInbtn {
+  width: 50ch;
+  height: 50px;
+  background-color: #040744 !important;
+  font-family: "Josefin Sans", sans-serif !important;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 10px;
+  line-height: 20px;
+  color: white;
+}
+.DarkBlueTxt {
+  color: #040744 !important;
+  font-weight: 700;
+}
+.inputParDiv {
+  font-family: "Josefin Sans", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.ParOfDirectToSignUp {
+  width: 50ch;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 5px;
+  font-size: 15px;
+  color: #0407446e;
+}
+.LogoAndTxtBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 1028px) {
+  .signinMain {
+    position: relative; /* Ensure the .signinMain div is a positioned parent for the absolute positioned child */
+    overflow: hidden;
+  }
+
+  .signinMain::after {
+    content: ""; /* Create a pseudo-element to hold the background image */
+    position: absolute; /* Position the pseudo-element absolutely */
+    bottom: 0; /* Align the pseudo-element to the bottom */
+    right: 0; /* Align the pseudo-element to the right */
+    background-image: url(../../assets/idea_svgbackground.png); /* Specify the background image URL */
+    background-size: cover; /* Adjust the background size as needed */
+    width: 50%; /* Adjust the width of the background */
+    height: 40%; /* Adjust the height of the background */
+    z-index: -1; /* Ensure the background stays behind other content */
+  }
+
+  .signinMain::before {
+    content: ""; /* Create a pseudo-element to hold the background image */
+    position: absolute; /* Position the pseudo-element absolutely */
+    bottom: 0; /* Align the pseudo-element to the bottom */
+    left: 5%; /* Align the pseudo-element to the right */
+    background-image: url(../../assets/message\ 3backgroundgirl.png); /* Specify the background image URL */
+    background-repeat: no-repeat;
+    background-size: contain; /* Adjust the background size as needed */
+    width: 40%; /* Adjust the width of the background */
+    height: 20%; /* Adjust the height of the background */
+    z-index: -1; /* Ensure the background stays behind other content */
+  }
+
+  .signInRightDiv {
+    display: none;
+  }
+
+  .signInLeftDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20%;
+    width: 60%;
+  }
+
+  .inputParDiv {
+    width: 70%;
+  }
+  .SignInbtn {
+    width: 100%;
+  }
+  .forgtPassTxt {
+    width: 20ch;
+    text-align: end;
+    padding: 0;
+    color: #0407446e;
+  }
+}

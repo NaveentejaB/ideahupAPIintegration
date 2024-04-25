@@ -8,6 +8,7 @@ import CompeteSection from "../../components/compete_section/CompeteSection";
 import Features from "../../components/features_section/Features";
 import Evaluating from "../../components/Evaluationg_section/Evaluationg";
 import Faq from "../../components/faq/Faq";
+import Navbar from "../../components/NavBar/NavBar";
 
 const HomePage = () => {
   // Assume isLoggedIn is a state that indicates whether the user is logged in or not
@@ -20,6 +21,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Navbar />
       <section className="header_section">
         <div className="header_section_container container">
           <div className="header_section_content">
@@ -35,11 +37,11 @@ const HomePage = () => {
             </div>
             <div className="header_section_btn">
               {isLoggedIn ? (
-                <a href="/your-ideas" className="link">
+                <a href="/ideahub" className="link">
                   Submit Your Idea
                 </a>
               ) : (
-                <a href="/sign-up" className="link" onClick={toggleLoginStatus}>
+                <a href="/signup" className="link" onClick={toggleLoginStatus}>
                   Sign Up Now
                 </a>
               )}
