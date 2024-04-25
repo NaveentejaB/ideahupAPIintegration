@@ -42,7 +42,7 @@ const HomePage = () => {
                 </a>
               ) : (
                 <a href="/signup" className="link" onClick={toggleLoginStatus}>
-                  Sign Up Now
+                  Enroll Now
                 </a>
               )}
             </div>
