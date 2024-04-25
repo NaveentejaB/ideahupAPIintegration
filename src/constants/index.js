@@ -9,15 +9,15 @@ export const NavLinks = [
   },
   {
     title: "About",
-    path: "/about",
+    path: "#about",
   },
   {
     title: "FAQ",
-    path: "/faq",
+    path: "#faq",
   },
   {
     title: "Blog",
-    path: "/blog",
+    path: "#blog",
   },
 ];
 

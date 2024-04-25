@@ -60,7 +60,7 @@ const CompeteSection = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <section className="compete_section">
+    <section className="compete_section" id="">
       <div className="compete_section_container container">
         <div className="compete_section_image">
           <img className="compete_img" src={CompeteImages} alt="compete" />

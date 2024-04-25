@@ -5,7 +5,7 @@ import FaqImage from "../../assets/svg_files/faq.svg";
 import { FaqQuestions } from "../../constants";
 const Faq = () => {
   return (
-    <section className="faq_section">
+    <section className="faq_section" id="faq">
       <div className="faq_section_container container">
         <div className="faq_section_content">
           {FaqQuestions.map((item) => (

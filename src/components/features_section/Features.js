@@ -6,7 +6,7 @@ import { FeaturesData } from "../../constants";
 
 const Features = () => {
   return (
-    <section className="features_section">
+    <section className="features_section" id="about">
       <div className="features_section_container container">
         <div className="features_heading">
           <h1 className="heading">Features That Celebrate Your Innovations</h1>
