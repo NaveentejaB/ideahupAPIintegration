@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./HomePage.css";
 
 // custom imports
@@ -11,6 +11,9 @@ import Faq from "../../components/faq/Faq";
 import Navbar from "../../components/NavBar/NavBar";
 
 const HomePage = () => {
+  useEffect(() => {
+    document.title = "IdeaHub ";
+  }, []);
   // Assume isLoggedIn is a state that indicates whether the user is logged in or not
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 

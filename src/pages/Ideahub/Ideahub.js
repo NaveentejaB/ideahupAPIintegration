@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import style from "./Ideahub.module.css";
 
@@ -12,6 +12,9 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import WorkIcon from "@mui/icons-material/Work";
 
 const Ideahub = () => {
+  useEffect(() => {
+    document.title = "Submit Idea";
+  }, []);
   const [text, setText] = useState("");
 
   const formik = useFormik({

@@ -103,6 +103,9 @@ const Signup = () => {
       setMobile(input);
     }
   };
+  useEffect(() => {
+    document.title = "Sign up";
+  }, []);
 
   return (
     <div className={style.signupMain}>

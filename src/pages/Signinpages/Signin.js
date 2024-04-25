@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import signInRightImg from "../../assets/signin.png";
 import LogoImg from "../../assets/image.png";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -20,6 +20,9 @@ const Signin = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  useEffect(() => {
+    document.title = "Sign In";
+  }, []);
   return (
     <div className={style.signinMain}>
       <div className={style.signInLeftDiv}>
