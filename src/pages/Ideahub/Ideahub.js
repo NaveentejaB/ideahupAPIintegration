@@ -28,7 +28,7 @@ const Ideahub = () => {
           values,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              authorization: token,
               "Content-Type": "application/json",
             },
           }
@@ -36,7 +36,7 @@ const Ideahub = () => {
         console.log(response.data);
         // Handle success
       } catch (error) {
-        console.error("Error submitting idea:", error);
+        console.error("Error submitting idea:", error.message);
         // Handle error
       }
     },
@@ -57,18 +57,19 @@ const Ideahub = () => {
         "https://ideahubbackend.up.railway.app/user/",
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            authorization: token,
             "Content-Type": "application/json",
           },
         }
       );
       if (response.status === 200) {
-        setUserData(response.data);
+        setUserData(response.data.data);
+        console.log(response.data.message);
       } else {
-        console.error("Failed to fetch user details:", response.statusText);
+        console.error("Failed to fetch user details:", response.data.message);
       }
-    } catch (error) {
-      console.error("Error fetching user details:", error);
+    } catch (err) {
+      console.error("Error fetching user details:", err.message);
     }
   };
 
