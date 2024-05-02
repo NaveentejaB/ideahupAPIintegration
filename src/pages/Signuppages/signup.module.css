@@ -86,6 +86,14 @@
   color: #0407446e;
 }
 
+
+
+.error{
+  height: 5px;
+  text-align:right;
+  color: red;
+}
+
 .starMark {
   color: red;
 }

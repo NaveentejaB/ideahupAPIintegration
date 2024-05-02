@@ -1,98 +1,81 @@
+
+
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import style from "./Ideahub.module.css";
-
 import ideahub from "../../assets/IdeaHubideahub_logo.jpg";
-
 import { Editor } from "primereact/editor";
-
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import BadgeIcon from "@mui/icons-material/Badge";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import WorkIcon from "@mui/icons-material/Work";
+import axios from "axios";
 
 const Ideahub = () => {
-  useEffect(() => {
-    document.title = "Submit Idea";
-  }, []);
-  const [text, setText] = useState("");
-
   const formik = useFormik({
     initialValues: {
       name: "",
-      email_id: "",
-      mobile: "",
+      email: "",
+      phone: "",
       select: "Select a option",
       message: "",
     },
-    onSubmit: (values) => {
-      console.log("form submit", values);
+    onSubmit: async (values) => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await axios.post(
+          "https://ideahubbackend.up.railway.app/user/",
+          values,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response.data);
+        // Handle success
+      } catch (error) {
+        console.error("Error submitting idea:", error);
+        // Handle error
+      }
     },
   });
-  console.log("formValues:", formik.values);
+  
+  const [text, setText] = useState("");
+  const [userData, setUserData] = useState({});
 
-  // to fetch the user details to display
-  const fetchUserDetails = async() => {
-    try{
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('https://ideahubbackend.up.railway.app/',{
-        method : 'GET',
-        headers :{
-            'authorization' : token,
-            'Content-Type': 'application/json',
-        }
-      });
-      if(response.status === 403){
-        // navigate to login page
-      }
-      const result = await response.json();
-      if(!result.error && response.status === 200){
-        const data = result.data
-        // set the default variables in the feilds like email, phone number,name
-      }
+  const fetchUserDetails = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
       
-      console.log(result.message);
-    }catch(err){
-      console.log('Error proccessing the request:',err.message)
+      if (!token) {
+        console.error("Access token is missing.");
+        return;
+      }
+      const response = await axios.get(
+        "https://ideahubbackend.up.railway.app/user/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        setUserData(response.data);
+      } else {
+        console.error("Failed to fetch user details:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
     }
-  }
+  };
 
-  // handle idea submission
-  const handleIdeaSubmit = async(e) => {
-    e.preventDefault();
-    try{
-      // Assuming userRole,idea,pros,crons are provided in data as object
-      const token = localStorage.getItem('access_token');
-      const data = {
-
-      }
-      const response = await fetch('https://ideahubbackend.up.railway.app/',{
-        method : 'POST',
-        headers :{
-            'authorization' : token,
-            'Content-Type': 'application/json',
-        },
-        body : JSON.stringify(data)
-      })
-      if(response.status === 403){
-        // navigate to login page
-      }
-      const result = await response.json()
-      if(!result.error && response.status === 200){
-        // tell the user that data was stored successfully.
-      }else{
-        // tell user to try again. (update it)
-      }
-      console.log(result.message);
-    }catch(err){
-      console.log('Error proccessing the request:',err.message)
-    }
-  }
-
-
-  useEffect(async()=>{
-    await fetchUserDetails();
-  },[])
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
+  
 
   return (
     <>
@@ -103,7 +86,6 @@ const Ideahub = () => {
               <a href="/">
                 <img src={ideahub} alt="ideahub_logo" />
               </a>
-              {/* I<span>dea</span>H<span>ub</span> */}
             </p>
             <div className={style.alaram}>
               <p className={style.alaramcount}>3</p>
@@ -129,9 +111,7 @@ const Ideahub = () => {
           <form action="" onSubmit={formik.handleSubmit}>
             <div className={style.form_row1}>
               <div className={style.input_with_logo}>
-                {/* <img src={name} alt="" className={style.input_logo} /> */}
                 <BadgeIcon className={style.input_logo} />
-
                 <input
                   type="text"
                   name="name"
@@ -141,15 +121,13 @@ const Ideahub = () => {
                   placeholder="Name"
                 />
               </div>
-
               <div className={style.input_with_logo}>
-                {/* <img src={Mail} alt="" className={style.input_logo} /> */}
                 <MailOutlineIcon className={style.input_logo} />
                 <input
                   type="email"
-                  name="email_id"
-                  id="email_id"
-                  value={formik.values.email_id}
+                  name="email"
+                  id="email"
+                  value={formik.values.email}
                   onChange={formik.handleChange}
                   placeholder="Email Id"
                 />
@@ -157,23 +135,18 @@ const Ideahub = () => {
             </div>
             <div className={style.form_row2}>
               <div className={style.input_with_logo}>
-                {/* <img src={Phone} alt="" className={style.input_logo} /> */}
                 <LocalPhoneIcon className={style.input_logo} />
-
                 <input
                   type="tel"
-                  name="mobile"
-                  id="mobile"
-                  value={formik.values.mobile}
+                  name="phone"
+                  id="phone"
+                  value={formik.values.phone}
                   onChange={formik.handleChange}
                   placeholder="Mobile No"
                 />
               </div>
-
               <div className={style.input_with_logo}>
-                {/* <img src={Briefcase} alt="" className={style.input_logo} /> */}
                 <WorkIcon className={style.input_logo} />
-
                 <select
                   name="select"
                   id="select"
@@ -188,18 +161,6 @@ const Ideahub = () => {
               </div>
             </div>
             <div>
-              {/* <label htmlFor="message" className={style.text_area_label}>Leave a coment</label>
-                <textarea
-        id="message"
-        name="message"
-        value={formik.values.message}
-        onChange={formik.handleChange}
-        rows="20"
-        cols="187"
-        style={{background:"#F3F3F3", border:"none"}}
-
-      /> */}
-
               <div className="card">
                 <Editor
                   value={text}
@@ -217,3 +178,30 @@ const Ideahub = () => {
 };
 
 export default Ideahub;
+
+
+
+  const fetchUserDetails = async() => {
+    try{
+      const token = localStorage.getItem('access_token');
+      const response = await fetch('https://ideahubbackend.up.railway.app/user/',{
+        method : 'GET',
+        headers :{
+            'authorization' : `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+      });
+      if(response.status === 403){
+        // navigate to login page
+      }
+      const result = await response.json();
+      if(!result.error && response.status === 200){
+        const data = result.data
+        // set the default variables in the feilds like email, phone number,name
+      }
+      
+      console.log(result.message);
+    }catch(err){
+      console.log('Error proccessing the request:',err.message)
+    }
+  }

@@ -1,3 +1,6 @@
+
+
+
 import React, { useState, useEffect } from "react";
 import style from "./signup.module.css";
 import Logoimg from "../../assets/image.png";
@@ -14,8 +17,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ideahub from "../../assets/IdeaHubideahub_logo.jpg";
-import { Password } from "@mui/icons-material";
-
+import { useFormik } from "formik";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +32,10 @@ const Signup = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const handleClose = () => {
+        setShowWhiteCard(false);
+        setAccountCreated(false);
+      };
 
   // Function to generate a random 6-digit OTP
   const generateOTP = () => {
@@ -37,85 +43,89 @@ const Signup = () => {
     return otp.toString();
   };
 
-  // to make request for OTP
-  const sendOtpRequest = async(email) => {
-    try{
-      const data = {
-        email : email
-      }
-      const response = await fetch('https://ideahubbackend.up.railway.app/auth/otp',{
-        method : 'POST',
-        headers :{
-            'Content-Type': 'application/json',
-        },
-        body : JSON.stringify(data)
-      })
-      const result = await response.json()
-      if( !result.error || response.status === 200){
+  // Function to send OTP request
+  const sendOtpRequest = async (email) => {
+    try {
+      const data = { email: email };
+      const response = await fetch(
+        "https://ideahubbackend.up.railway.app/auth/otp",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      if (!result.error && response.status === 200) {
+        console.log("OTP sent to", email, ":", otp);
         console.log(result.message);
         // Show the white card
         setShowWhiteCard(true);
       }
-    }catch(err){
-      console.log('Error proccessing the request:',err.message)
+    } catch (err) {
+      console.log("Error processing the request:", err.message);
     }
-  }
-
-  // Function to handle form submission
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-
-    // Assuming email address is retrieved from the form
-    const enteredEmail = e.target.elements.emailSignup.value;
-    setEmail(enteredEmail);
-    const generatedOTP = generateOTP();
-    setOtp(generatedOTP);
-    // to make request for the OTP
-    await sendOtpRequest(email);
   };
 
+  // Function to handle form submission
+  const handleSubmit = async (values) => {
+    try {
+      const data = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        password: values.password,
+        otp:parseInt(otp),
+      };
+
+      const response = await fetch(
+        "https://ideahubbackend.up.railway.app/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!result.error && response.status === 201) {
+        localStorage.setItem("access_token", result.accessToken);
+        // Account created successfully
+        setAccountCreated(true);
+      } else {
+        // Handle registration errors
+        if (result.message === "invalid OTP") {
+          // Handle invalid OTP error
+          console.log("Invalid OTP. Please try again.");
+          // You can update the UI to display an error message to the user
+        } else {
+          // Handle other registration errors
+          console.log("Registration failed:", result.message);
+        }
+      }
+    } catch (err) {
+      console.log("Error processing the request:", err.message);
+    }
+  };
+
+  // Function to handle OTP input change
   const handleOtpChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
   };
 
-  const handleClose = () => {
-    setShowWhiteCard(false);
-    setAccountCreated(false);
-  };
-
-  const handleWhiteCardSubmit = async(e) => {
+  // Function to handle white card submission
+  const handleWhiteCardSubmit = async (e) => {
     e.preventDefault();
-    try{
-      // Placeholder for handling OTP submission
-    // Here you can verify the OTP and proceed accordingly
-    // For demonstration, I'm setting the accountCreated state to true
-
-    // Assuming name, phone(as number), email, password, otp(as number) are provided in data
-    const data = {
-
-    }
-    const response = await fetch('https://ideahubbackend.up.railway.app/auth/register',{
-        method : 'POST',
-        headers :{
-            'Content-Type': 'application/json',
-        },
-        body : JSON.stringify(data)
-      })
-      const result = await response.json()
-      if(!result.error && response.status === 201){
-        localStorage.setItem('access_token',result.accessToken);
-        // navigate to home page (account created successfully) (update it)
-      }else{
-        // stay in the signup page (update it)
-      }
-      console.log(result.message);
-    }catch(err){
-      console.log('Error proccessing the request:',err.message)
-    }
+    // Assuming form values are retrieved using formik
+    handleSubmit(formik.values);
   };
-
 
   useEffect(() => {
     let timerId;
@@ -135,31 +145,23 @@ const Signup = () => {
     return () => clearTimeout(timerId);
   }, [showWhiteCard, resendTimer]);
 
-  const handleResendOTP = async() => {
-    // Handle resend OTP action here
-    // For demonstration, you can reset the timer
-    const generatedOTP = generateOTP();
-    setOtp(generatedOTP);
-    
-    // resend option should work only when timer becomes 0.
-    if(resendTimer === 0){
-      setResendTimer(30);
-      await sendOtpRequest(email);
-    }
-  };
-
-  const [mobile, setMobile] = useState("");
-
-  const handleMobileChange = (event) => {
-    const input = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-    if (input.length <= 10) {
-      // Restrict input to 10 characters
-      setMobile(input);
-    }
-  };
-  useEffect(() => {
-    document.title = "Sign up";
-  }, []);
+  // Formik form handling
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmpassword: "",
+    },
+    onSubmit: (values) => {
+      // Send OTP request when form is submitted
+      setEmail(values.email);
+      const generatedOTP = generateOTP();
+      setOtp(generatedOTP);
+      sendOtpRequest(values.email);
+    },
+  });
 
   return (
     <div className={style.signupMain}>
@@ -180,8 +182,10 @@ const Signup = () => {
             </div>
           </div>
           <div className={style.inputParDiv}>
-            <form action="" onSubmit={handleSubmit}>
-              <FormControl
+            {/* Formik form */}
+            <form onSubmit={formik.handleSubmit}>
+           <FormControl
+               {...formik.getFieldProps("name")}
                 className={style.signupInput}
                 size="medium"
                 sx={{
@@ -189,26 +193,31 @@ const Signup = () => {
                   "@media (max-width: 600px)": { width: "100%" },
                 }}
                 variant="standard"
-              >
-                <label htmlFor="nameSignup">
+               >
+                <label htmlFor="name">
                   <span className={style.starMark}>*</span>
                   <span>Full Name</span>
                 </label>
                 <OutlinedInput
-                  name = 'nameSignup'
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                  name = 'name'
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="nameSignup"
-                  placeholder="Enter Your Full Name"
+                  id="name"
+                  placeholder="Enter Your  Name"
                   endAdornment={
                     <InputAdornment position="end">
                       <BadgeIcon sx={{ color: "#0407446E", fontSize: 20 }} />
                     </InputAdornment>
                   }
                   aria-describedby="outlined-weight-helper-text"
-                  inputProps={{ "aria-label": "Name" }}
+                  inputProps={{ "aria-label": "name" }}
                 />
               </FormControl>
+              {formik.touched.name && formik.errors.name ? (
+                <div className={style.error}>{formik.errors.name}</div>
+              ) : null}
               <FormControl
                 className={style.signupInput}
                 size="medium"
@@ -218,15 +227,19 @@ const Signup = () => {
                 }}
                 variant="standard"
               >
-                <label htmlFor="emailSignup">
+                <label htmlFor="email">
                   <span className={style.starMark}>*</span>
                   <span>Email</span>
                 </label>
                 <OutlinedInput
+                                  {...formik.getFieldProps("email")}
+
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="emailSignup"
-                  name="emailSignup"
+                  id="email"
+                  name="email"
                   placeholder="email@gmail.com"
                   endAdornment={
                     <InputAdornment position="end">
@@ -239,6 +252,9 @@ const Signup = () => {
                   inputProps={{ "aria-label": "email" }}
                 />
               </FormControl>
+              {formik.touched.email && formik.errors.email ? (
+                <div className={style.error}>{formik.errors.email}</div>
+              ) : null}
               <FormControl
                 className={style.signupInput}
                 size="medium"
@@ -248,18 +264,19 @@ const Signup = () => {
                 }}
                 variant="standard"
               >
-                <label htmlFor="mobileSignup">
+                <label htmlFor="phone">
                   <span className={style.starMark}>*</span>
                   <span>Mobile Number</span>
                 </label>
                 <OutlinedInput
+                {...formik.getFieldProps("phone")}
+                  value={formik.values.phone}
+                  onChange={formik.handleChange}
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  name="mobileSignup"
-                  id="mobileSignup"
+                  name="phone"
+                  id="phone"
                   placeholder="+91-12345-67890"
-                  value={mobile}
-                  onChange={handleMobileChange}
                   endAdornment={
                     <InputAdornment position="end">
                       <StayCurrentPortraitIcon
@@ -271,6 +288,9 @@ const Signup = () => {
                   inputProps={{ "aria-label": "mobile" }}
                 />
               </FormControl>
+              {formik.touched.phone && formik.errors.phone ? (
+                <div className={style.error}>{formik.errors.phone}</div>
+              ) : null}
               <FormControl
                 className={style.signupInput}
                 size="medium"
@@ -280,15 +300,18 @@ const Signup = () => {
                 }}
                 variant="standard"
               >
-                <label htmlFor="signUpPassword">
+                <label htmlFor="password">
                   <span className={style.starMark}>*</span>
                   <span>Password</span>
                 </label>
                 <OutlinedInput
+                {...formik.getFieldProps("password")}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="signUpPassword"
-                  name = "signUpPassword"
+                  id="password"
+                  name = "password"
                   type={showPassword ? "text" : "password" }
                   placeholder="Password"
                   endAdornment={
@@ -307,6 +330,9 @@ const Signup = () => {
                   label="Password"
                 />
               </FormControl>
+              {formik.touched.password && formik.errors.password ? (
+                <div className={style.error}>{formik.errors.password}</div>
+              ) : null}
               <FormControl
                 className={style.signupInput}
                 size="medium"
@@ -316,15 +342,18 @@ const Signup = () => {
                 }}
                 variant="standard"
               >
-                <label htmlFor="signUpPasswordConfirm">
+                <label htmlFor="confirmpassword">
                   <span className={style.starMark}>*</span>
                   <span>Confirm Password</span>
                 </label>
                 <OutlinedInput
-                  name="signUpPasswordConfirm"
+                {...formik.getFieldProps("confirmpassword")}
+                  value={formik.values.confirmpassword}
+                  onChange={formik.handleChange}
+                  name="confirmpassword"
                   className="borderless-input"
                   sx={{ background: "#F3F3F3" }}
-                  id="signUpPasswordCofirm"
+                  id="confirmpassword"
                   type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   endAdornment={
@@ -343,11 +372,15 @@ const Signup = () => {
                   label="Confirm Password"
                 />
               </FormControl>
+              {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
+                <div className={style.error}>{formik.errors.confirmpassword}</div>
+              ) : null}
+              
               <button type="submit" className={style.Signupbtn}>
                 Sign Up
               </button>
             </form>
-
+            {/* Sign In link */}
             <div className={style.ParOfDirectToSignIn}>
               <span>Already have an account?</span>
               <Link to={"/"}>
@@ -358,51 +391,42 @@ const Signup = () => {
         </div>
       </div>
       {/* White card */}
-      {showWhiteCard && !accountCreated && (
+      {showWhiteCard && (
         <div className={style.whiteCard}>
-          <button className={style.closeBtn} onClick={handleClose}>
-            <CloseIcon />
-          </button>
-          <div className={style.otpContainer}>
-            <div className={style.otpMessage}>
-              Please enter OTP to reset your password
-            </div>
-            <div className={style.email}>
-              A One-Time Password has been sent to {email}
-            </div>
-            <form className={style.otpForm} onSubmit={handleWhiteCardSubmit}>
-              {/* <input type="text" placeholder="Enter OTP" value={otp} /> */}
-              <div className={style.otpInput}>
-                {[...Array(6)].map((_, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    maxLength="1"
-                    onChange={(e) => handleOtpChange(index, e.target.value)}
-                    value={otp[index] || ""}
-                    autoFocus={index === 0} // Autofocus on the first input box
-                  />
-                ))}
-              </div>
-              <div className={style.timeLeft}>
-                Didn't receive?{" "}
-                <span onClick={handleResendOTP}>Resend OTP</span>{" "}
-                <span className={style.timer}>
-                  Time :{" "}
-                  <span className={style.timeValue}>{resendTimer} sec</span>
-                </span>
-              </div>
+           <button className={style.closeBtn} onClick={handleClose}>
+//             <CloseIcon />
+//           </button>
+          {/* OTP input form */}
+          <form className={style.otpForm} onSubmit={handleWhiteCardSubmit}>
+            <div className={style.otpInput}>
+              {[...Array(6)].map((_, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength="1"
+                  onChange={(e) => handleOtpChange(index, e.target.value)}
+                  // value={otp[index] || ""}
+                  value={otp[index] || ""}
+                  // onChange={sendOtpRequest.otp}
+                  autoFocus={index === 0} // Autofocus on the first input box
 
-              <button type="submit">Submit</button>
-            </form>
-          </div>
+                />
+              ))}
+            </div>
+            <div className={style.timeLeft}>
+              Didn't receive?{" "}
+              <span onClick={sendOtpRequest}>Resend OTP</span>{" "}
+              <span className={style.timer}>
+                Time : <span className={style.timeValue}>{resendTimer} sec</span>
+              </span>
+            </div>
+            <button type="submit">Submit</button>
+          </form>
         </div>
       )}
+      {/* Success message */}
       {accountCreated && (
         <div className={style.successMessage}>
-          <button className={style.closeBtn} onClick={handleClose}>
-            <CloseIcon />
-          </button>
           <p>Account successfully created!</p>
         </div>
       )}
