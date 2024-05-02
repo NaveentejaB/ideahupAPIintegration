@@ -83,7 +83,6 @@ const Signup = () => {
         password: values.password,
         otp:parseInt(otpResult),
       };
-      console.log(data);
       const response = await fetch(
         "https://ideahubbackend.up.railway.app/auth/register",
         {
@@ -96,7 +95,6 @@ const Signup = () => {
       );
 
       const result = await response.json();
-      console.log(result);
       if (!result.error && response.status === 201) {
         localStorage.setItem("access_token", result.accessToken);
         // Account created successfully

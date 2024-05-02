@@ -64,7 +64,6 @@ const Ideahub = () => {
       );
       if (response.status === 200) {
         setUserData(response.data.data);
-        console.log(response.data.data);
         console.log(response.data.message);
       } else {
         console.error("Failed to fetch user details:", response.data.message);

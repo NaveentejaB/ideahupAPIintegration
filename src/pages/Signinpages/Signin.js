@@ -29,17 +29,14 @@ const Signin = () => {
 
   const handleSignIn = async (values) => {
     try {
-      console.log(values);
       const response = await axios.post('https://ideahubbackend.up.railway.app/auth/login', {
         email: values.email,
         password: values.password
       });
-      console.log(response);
       if (!response.data.error && response.status === 200) {
         const accessToken = response.data.accessToken;
         localStorage.setItem('access_token', accessToken);
         axios.defaults.headers.common['authorization'] = accessToken; // Set default headers
-        console.log('hello');
         // Fetch user details after successful login
         const userResponse = await axios.get('https://ideahubbackend.up.railway.app/user/', {
           headers: {
@@ -47,7 +44,6 @@ const Signin = () => {
             "Content-Type": "application/json",
           },
         });
-        console.log(userResponse);
         if (userResponse.status === 200) {
           const userData = userResponse.data.data;
           navigate("/ideahub", { state: { userData } });
