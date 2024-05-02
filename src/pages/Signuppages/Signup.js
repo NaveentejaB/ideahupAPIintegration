@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ideahub from "../../assets/IdeaHubideahub_logo.jpg";
 import { useFormik } from "formik";
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +27,7 @@ const Signup = () => {
   const [showWhiteCard, setShowWhiteCard] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
   const [resendTimer, setResendTimer] = useState(30); // Timer starts from 30 seconds
-
+  const navigate = useNavigate()
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -63,6 +64,8 @@ const Signup = () => {
         console.log(result.message);
         // Show the white card
         setShowWhiteCard(true);
+      }else{
+        console.log("Error processing the request:", result.message);
       }
     } catch (err) {
       console.log("Error processing the request:", err.message);
@@ -72,14 +75,15 @@ const Signup = () => {
   // Function to handle form submission
   const handleSubmit = async (values) => {
     try {
+      const otpResult = otp.join("");
       const data = {
         name: values.name,
         email: values.email,
         phone: values.phone,
         password: values.password,
-        otp:parseInt(otp),
+        otp:parseInt(otpResult),
       };
-
+      console.log(data);
       const response = await fetch(
         "https://ideahubbackend.up.railway.app/auth/register",
         {
@@ -92,11 +96,12 @@ const Signup = () => {
       );
 
       const result = await response.json();
-
+      console.log(result);
       if (!result.error && response.status === 201) {
         localStorage.setItem("access_token", result.accessToken);
         // Account created successfully
         setAccountCreated(true);
+        navigate('/ideahub');
       } else {
         // Handle registration errors
         if (result.message === "invalid OTP") {

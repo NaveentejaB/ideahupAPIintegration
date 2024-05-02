@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import signInRightImg from "../../assets/signin.png";
@@ -32,29 +29,31 @@ const Signin = () => {
 
   const handleSignIn = async (values) => {
     try {
+      console.log(values);
       const response = await axios.post('https://ideahubbackend.up.railway.app/auth/login', {
         email: values.email,
         password: values.password
       });
-
+      console.log(response);
       if (!response.data.error && response.status === 200) {
         const accessToken = response.data.accessToken;
         localStorage.setItem('access_token', accessToken);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`; // Set default headers
-
+        axios.defaults.headers.common['authorization'] = accessToken; // Set default headers
+        console.log('hello');
         // Fetch user details after successful login
         const userResponse = await axios.get('https://ideahubbackend.up.railway.app/user/', {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: accessToken,
             "Content-Type": "application/json",
           },
         });
-
+        console.log(userResponse);
         if (userResponse.status === 200) {
-          const userData = userResponse.data;
+          const userData = userResponse.data.data;
           navigate("/ideahub", { state: { userData } });
+          console.log(userData);
         } else {
-          console.error("Failed to fetch user details:", userResponse.statusText);
+          console.error("Failed to fetch user details:", userResponse.data.message);
           // Handle error
         }
       } else {
@@ -85,8 +84,8 @@ const Signin = () => {
       }
       if (!values.password) {
         errors.password = "Required";
-      } else if (values.password.length < 6) {
-        errors.password = "Password must be at least 6 characters long";
+      } else if (values.password.length < 3) {
+        errors.password = "Password must be at least 3 characters long";
       }
       return errors;
     },
