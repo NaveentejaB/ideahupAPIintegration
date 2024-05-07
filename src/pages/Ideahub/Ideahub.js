@@ -857,7 +857,7 @@ const Ideahub = () => {
 
     
             </div>
-            <Button type="submit" variant="contained" className={style.submit_button}>Submit</Button>
+            <Button type="submit" variant="containedgit a" className={style.submit_button}>Submit</Button>
 
             <ToastContainer />
 
