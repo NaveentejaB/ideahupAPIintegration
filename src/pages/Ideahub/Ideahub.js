@@ -673,6 +673,20 @@ const Ideahub = () => {
       idea: "",
       phone: userPhone || "", // Use userPhone if available, otherwise default to empty string
     },
+    validate: (values) => {
+      const errors = {};
+  
+      if (!values.phone) {
+        errors.phone = "Mobile No is required";
+      }
+      if (!values.userRole || values.userRole === "Select Option") {
+        errors.userRole = "Please select a role";
+      }
+      if (!values.idea) {
+        errors.idea = "Idea is required";
+      }
+      return errors;
+    },
     onSubmit: async (values) => {
       try {
         const token = sessionStorage.getItem("access_token");
@@ -688,6 +702,7 @@ const Ideahub = () => {
         );
         console.log(response.data);
         console.log(values);
+        notify()
       } catch (error) {
         console.error("Error submitting idea:", error.message);
       }
@@ -746,6 +761,8 @@ const Ideahub = () => {
                 name="name"
 
               />
+                              {/* {formik.errors.name ? <FormHelperText error>{formik.errors.name}</FormHelperText> : null} */}
+
             </FormControl>
             <FormControl className={style.signupInput} size='medium' sx={{ width: '100%', '@media (max-width: 600px)': { width: '100%' } }} variant="standard">
             <label htmlFor="nameSignup">
@@ -765,6 +782,8 @@ const Ideahub = () => {
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{ 'aria-label': 'email' }}
               />
+                              {/* {formik.errors.email ? <FormHelperText error>{formik.errors.email}</FormHelperText> : null} */}
+
             </FormControl>
             </div>
             <div className={style.form_row2}>
@@ -785,6 +804,8 @@ const Ideahub = () => {
         aria-describedby="outlined-weight-helper-text"
         inputProps={{ 'aria-label': 'mobile' }}
       />
+                      {formik.errors.phone ? <FormHelperText error>{formik.errors.phone}</FormHelperText> : null}
+
     </FormControl>
     <FormControl className={style.input_with_logo} size='medium' sx={{ width: '100%', '@media (max-width: 600px)': { width: '100%' } }} variant="standard">
       <FormLabel id="select-field-demo-label" htmlFor="select-field-demo-button">
@@ -800,7 +821,6 @@ const Ideahub = () => {
             id: 'select-field-demo-button',
             // TODO: Material UI set aria-labelledby correctly & automatically
             // but Base UI and Joy UI don't yet.
-            'aria-labelledby': 'select-field-demo-label select-field-demo-button',
           },
         }}
       >
@@ -811,6 +831,8 @@ const Ideahub = () => {
         <MenuItem value="fresher">Fresher</MenuItem>
         
       </Select>
+      {formik.errors.userRole ? <FormHelperText error>{formik.errors.userRole}</FormHelperText> : null}
+
       <FormHelperText id="select-field-demo-helper">
       </FormHelperText>
     </FormControl>
@@ -827,11 +849,14 @@ const Ideahub = () => {
                 formik.setFieldValue("idea", e.htmlValue)
               }
               style={{ height: "320px" }}
-            />        </div>
-                        <button onClick={notify} type="submit" className={style.submit_button} >Submit</button>
+            />  
+                            {formik.errors.idea ? <FormHelperText error>{formik.errors.idea}</FormHelperText> : null}
+      </div>
 
     
             </div>
+                                    <button type="submit" className={style.submit_button} >Submit</button>
+
             <ToastContainer />
 
           </form>
