@@ -830,7 +830,7 @@ const Ideahub = () => {
             />        </div>
     
             </div>
-            <input onClick={notify} type="submit" className={style.submit_button} />
+            <button onClick={notify} type="submit" className={style.submit_button} >Submit</button>
             <ToastContainer />
 
           </form>

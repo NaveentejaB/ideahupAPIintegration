@@ -221,13 +221,13 @@ body {
   text-align: center;
   width: 320px;
   height: 60px;
-  margin-left: 600px;
+  margin-left: 200px;
 
   border-radius: 10px;
   opacity: 0px;
   background: #040744;
   color: white;
-  font-family: "san-serif";
+  /* font-family: "san-serif"; */
   font-size: 20px;
   font-weight: 700;
   line-height: 27.28px;
