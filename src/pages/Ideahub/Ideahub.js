@@ -620,6 +620,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../components/Context/UserContext";
 import { ToastContainer, toast } from 'react-toastify';
+import Button from '@mui/material/Button';
 
 import 'react-toastify/dist/ReactToastify.css';
 const Ideahub = () => {
@@ -703,6 +704,7 @@ const Ideahub = () => {
         console.log(response.data);
         console.log(values);
         notify()
+
       } catch (error) {
         console.error("Error submitting idea:", error.message);
       }
@@ -855,7 +857,7 @@ const Ideahub = () => {
 
     
             </div>
-                                    <button type="submit" className={style.submit_button} >Submit</button>
+            <Button type="submit" variant="contained" className={style.submit_button}>Submit</Button>
 
             <ToastContainer />
 
