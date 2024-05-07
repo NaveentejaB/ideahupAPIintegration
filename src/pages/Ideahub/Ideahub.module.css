@@ -88,7 +88,7 @@ body {
   display: flex;
   gap: 0;
   flex-direction: column;
-  width: 100px;
+  width: 400px;
   height: 40px;
 }
 
@@ -101,7 +101,7 @@ body {
   font-weight: 700;
   line-height: 22px;
   text-align: left;
-  width: 200px;
+  width: 300px;
 }
 .profile_mailid {
   display: flex;

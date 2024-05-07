@@ -28,6 +28,7 @@ const Signup = () => {
   const [accountCreated, setAccountCreated] = useState(false);
   const [resendTimer, setResendTimer] = useState(30); // Timer starts from 30 seconds
   const navigate = useNavigate()
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -39,10 +40,10 @@ const Signup = () => {
       };
 
   // Function to generate a random 6-digit OTP
-  const generateOTP = () => {
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    return otp.toString();
-  };
+  // const generateOTP = () => {
+  //   const otp = Math.floor(100000 + Math.random() * 900000);
+  //   return otp.toString();
+  // };
 
   // Function to send OTP request
   const sendOtpRequest = async (email) => {
@@ -96,7 +97,7 @@ const Signup = () => {
 
       const result = await response.json();
       if (!result.error && response.status === 201) {
-        localStorage.setItem("access_token", result.accessToken);
+        sessionStorage.setItem("access_token", result.accessToken);
         // Account created successfully
         setAccountCreated(true);
         navigate('/ideahub');
@@ -160,9 +161,10 @@ const Signup = () => {
     onSubmit: (values) => {
       // Send OTP request when form is submitted
       setEmail(values.email);
-      const generatedOTP = generateOTP();
-      setOtp(generatedOTP);
+      // const generatedOTP = generateOTP();
+      setOtp(otp);
       sendOtpRequest(values.email);
+   
     },
   });
 

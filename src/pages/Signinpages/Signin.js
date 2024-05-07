@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import signInRightImg from "../../assets/signin.png";
 import LogoImg from "../../assets/image.png";
@@ -15,11 +15,14 @@ import ideahub from "../../assets/IdeaHubideahub_logo.jpg";
 import "./MUI.css";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../components/Context/UserContext";
 
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  // const userObj=useContext(UserContext)
+  const { login } = useContext(UserContext);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -35,7 +38,7 @@ const Signin = () => {
       });
       if (!response.data.error && response.status === 200) {
         const accessToken = response.data.accessToken;
-        localStorage.setItem('access_token', accessToken);
+        sessionStorage.setItem('access_token', accessToken);
         axios.defaults.headers.common['authorization'] = accessToken; // Set default headers
         // Fetch user details after successful login
         const userResponse = await axios.get('https://ideahubbackend.up.railway.app/user/', {
@@ -44,11 +47,21 @@ const Signin = () => {
             "Content-Type": "application/json",
           },
         });
-        if (userResponse.status === 200) {
-          const userData = userResponse.data.data;
-          navigate("/ideahub", { state: { userData } });
-          console.log(userData);
-        } else {
+//         if (userResponse.status === 200) {
+//           const userData = userResponse.data.data;
+//           login(userData);
+//           navigate("/ideahub", { state: { userData } });
+//           userObj.login(userData)
+//           console.log(          userObj.login(userData)
+// );
+//           console.log("Userdata",userData);
+//         } 
+if (userResponse.status === 200) {
+  const userData = userResponse.data.data;
+  login(userData);
+  navigate("/ideahub");
+}
+else {
           console.error("Failed to fetch user details:", userResponse.data.message);
           // Handle error
         }
