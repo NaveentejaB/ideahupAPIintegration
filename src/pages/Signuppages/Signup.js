@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ideahub from "../../assets/IdeaHubideahub_logo.jpg";
 import { useFormik } from "formik";
 import { useNavigate } from 'react-router-dom'
+import GoogleLogin from "react-google-login";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +34,15 @@ const Signup = () => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+  const handleGoogleSuccess = (response) => {
+    // Handle successful Google sign-in
+    console.log("Google sign-in successful:", response);
+    // Send the Google token to your backend for further processing
+  };
+  const handleGoogleFailure = (error) => {
+    // Handle Google sign-in failure
+    console.error("Google sign-in failed:", error);
   };
   const handleClose = () => {
         setShowWhiteCard(false);
@@ -86,6 +96,7 @@ const Signup = () => {
       };
       const response = await fetch(
         "https://ideahubbackend.up.railway.app/auth/register",
+        "https://ideahubbackend.up.railway.app/auth/google/callback",
         {
           method: "POST",
           headers: {
@@ -94,7 +105,7 @@ const Signup = () => {
           body: JSON.stringify(data),
         }
       );
-
+ 
       const result = await response.json();
       if (!result.error && response.status === 201) {
         sessionStorage.setItem("access_token", result.accessToken);
@@ -384,6 +395,15 @@ const Signup = () => {
               <button type="submit" className={style.Signupbtn}>
                 Sign Up
               </button>
+              <GoogleLogin
+                clientId="236243991979-avcflcuo90j58l08spl8tshkrcei76ok.apps.googleusercontent.com"
+                buttonText="Sign up with Google"
+                onSuccess={handleGoogleSuccess}
+                onFailure={handleGoogleFailure}
+                cookiePolicy={'single_host_origin'}
+                redirectUri="https://ideahubbackend.up.railway.app/callback"
+
+              />
             </form>
             {/* Sign In link */}
             <div className={style.ParOfDirectToSignIn}>
