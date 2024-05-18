@@ -16,7 +16,13 @@ import "./MUI.css";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../components/Context/UserContext";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast,ToastContainer } from "react-toastify";
 
+
+
+const notifyError = () => toast ("Invalid credentials");
+const notifySuccess = () => toast.success("Successfully logged in");
 
 
 const Signin = () => {
@@ -48,18 +54,11 @@ const Signin = () => {
             "Content-Type": "application/json",
           },
         });
-//         if (userResponse.status === 200) {
-//           const userData = userResponse.data.data;
-//           login(userData);
-//           navigate("/ideahub", { state: { userData } });
-//           userObj.login(userData)
-//           console.log(          userObj.login(userData)
-// );
-//           console.log("Userdata",userData);
-//         } 
+
 if (userResponse.status === 200) {
   const userData = userResponse.data.data;
   login(userData);
+  notifySuccess()
   navigate("/ideahub");
 }
 else {
@@ -69,9 +68,14 @@ else {
       } else {
         console.error("Failed to login:", response.data.message);
         // Handle error
+        notifyError()
+
       }
     } catch (err) {
       console.error('Error processing the request:', err.message);
+      notifyError()
+      
+
     }
   };
   
@@ -111,6 +115,7 @@ else {
 
   return (
     <div className={style.signinMain}>
+        <ToastContainer />
       <div className={style.signInLeftDiv}>
         <div className={style.signInBox}>
           <div className={style.LogoAndTxtBox}>
